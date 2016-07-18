@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>ICP(Iterative Closest Point)学习笔记 - Chrisyayu&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ICP算法ICP是一种在非理想情况下的点集匹配算法，给定目标点集A（蓝色），以及初始点集B（红色），它能够将B匹配至A中的对应部分.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ICP(Iterative Closest Point)学习笔记">
+<meta property="og:url" content="https://chrisyayu.github.io/2016/07/07/ICP(Iterative-Closest-Point)学习笔记/index.html">
+<meta property="og:site_name" content="Chrisyayu's Blog">
+<meta property="og:description" content="ICP算法ICP是一种在非理想情况下的点集匹配算法，给定目标点集A（蓝色），以及初始点集B（红色），它能够将B匹配至A中的对应部分.">
+<meta property="og:image" content="https://c8.staticflickr.com/8/7417/27531287583_6090e70efa_b.jpg">
+<meta property="og:image" content="https://c4.staticflickr.com/8/7742/27531117803_8fecba3172_b.jpg">
+<meta property="og:image" content="https://c6.staticflickr.com/8/7456/27531103813_e10024d77b_b.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/8/7294/28042472072_2a289ebea6_b.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/8/7321/28116671536_46a1d2eb86.jpg">
+<meta property="og:image" content="https://c7.staticflickr.com/8/7459/28111906046_70fda4f4d5.jpg">
+<meta property="og:image" content="https://c3.staticflickr.com/8/7551/27865104850_4109b56d05.jpg">
+<meta property="og:image" content="https://c3.staticflickr.com/8/7322/27530976434_c75f3fac83.jpg">
+<meta property="og:image" content="https://c8.staticflickr.com/8/7408/28146730855_0bb4633025.jpg">
+<meta property="og:updated_time" content="2016-07-08T01:30:00.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ICP(Iterative Closest Point)学习笔记">
+<meta name="twitter:description" content="ICP算法ICP是一种在非理想情况下的点集匹配算法，给定目标点集A（蓝色），以及初始点集B（红色），它能够将B匹配至A中的对应部分.">
+<meta name="twitter:image" content="https://c8.staticflickr.com/8/7417/27531287583_6090e70efa_b.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://chrisyayu.github.io"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-ICP(Iterative-Closest-Point)学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ICP(Iterative Closest Point)学习笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/07/07/ICP(Iterative-Closest-Point)学习笔记/" class="article-date">
+  <time datetime="2016-07-07T13:53:09.000Z" itemprop="datePublished">2016-07-07</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ICP算法"><a href="#ICP算法" class="headerlink" title="ICP算法"></a>ICP算法</h2><p>ICP是一种在非理想情况下的点集匹配算法，给定目标点集A（蓝色），以及初始点集B（红色），它能够将B匹配至A中的对应部分.</p>
+<a id="more"></a>
+<p><img src="https://c8.staticflickr.com/8/7417/27531287583_6090e70efa_b.jpg" alt="鱼"></p>
+<p>在理想情况下，每个点与目标点应该是一一对应的，几步计算这样就可以直接将初始点集通过旋转与平移使得匹配完成。但是在现实的应用场景中，初始点在目标点集中并不可能完全匹配（在本文中的目标点集都加入了噪声），这时候就需要ICP算法的应用，当然，在遇到很大的信息缺失或者误差时，其具体实现要进行改进.</p>
+<p>先不管噪声，如果要对两个之间只有平移和旋转变换的点集进行匹配，一种很自然的方法就是先匹配对一个点，然后对整体进行旋转，但ICP算法不是这样，因为它不能保证每次匹配的点都是完全正确的，取而代之，它进行的是点点匹配，将每一个初始点与目标点集进行匹配，在每一个方向上，目标点集与该点作差方和，之后将它们相加取其中的最小值，该值的位置就是该点所需建立的映射对象.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function [match mindist] = match_bruteForce(q, p)//p是初始点集，q是目标点集</span><br><span class="line">    m = size(p,2);</span><br><span class="line">    n = size(q,2);    </span><br><span class="line">    match = zeros(1,m);</span><br><span class="line">    mindist = zeros(1,m);</span><br><span class="line">    for ki=1:m</span><br><span class="line">        d=zeros(1,n);</span><br><span class="line">        for ti=1:3</span><br><span class="line">            d=d+(q(ti,:)-p(ti,ki)).^2;</span><br><span class="line">        end</span><br><span class="line">        [mindist(ki),match(ki)]=min(d);</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    mindist = sqrt(mindist);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>嗯，我再解释一下，每个方向上算出来的平方和相加得到的就是初始点与目标点集所有点距离平方的集合，我们取最小值也就是找到了初始点匹配到目标点集中使两者之间距离最近的点，然后我们对初始点集中的所有点都进行这样的操作，不难理解，匹配成功事实上也就是初始点集与目标点集中的对应的每一点之间的距离最小.</p>
+<p>这种方法听上去貌似一次就可以完成匹配任务，但事实并不是这样，因为其中除了平移还有旋转变化，要匹配得好只能通过多次迭代来完成.</p>
+<h4 id="哈哈哈，我解释得够清楚吧！"><a href="#哈哈哈，我解释得够清楚吧！" class="headerlink" title="哈哈哈，我解释得够清楚吧！"></a>哈哈哈，我解释得够清楚吧！</h4><p>因为ICP的应用场景中是有各种噪声的，所以我们需要通过不断地迭代来逼近预期的目标对象，每一次迭代做的事都是重新匹配最近点，记录下该匹配与上次匹配之间的坐标变换（我知道你有疑问，看过来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//p_mark和q_mark已经质心化过了</span><br><span class="line">N = p_mark*transpose(q_mark); % taking points of q in matched order</span><br><span class="line"></span><br><span class="line">[U,~,V] = svd(N); % singular value decomposition</span><br><span class="line"></span><br><span class="line">R = V*diag([1 1 det(U*V&apos;)])*transpose(U);</span><br><span class="line"></span><br><span class="line">T = q_bar - R*p_bar;</span><br></pre></td></tr></table></figure></p>
+<p>旋转矩阵的话，把它们一起左乘在一个单位阵上就可以了，而平移矩阵的需要先左乘再加上每次的平移，（这对吗？对啊，可以看作前者是角度记录，后者是位置记录，至于为什么要每次记下来？那当然是因为ICP算法应用后最后要给出的是最初点集到目标点集的变换矩阵啦，不把每一次记录下来的话，只有最后一次的变换矩阵，这怎么行？为了匹配的精度或者是节省匹配的计算消耗，我们有必要设定一个阈值，这个阈值可以是迭代次数也可以是两点集之间的距离总长，在适当地设定之后可以达到预期效果.</p>
+<p>在每次匹配完成后，我们可以量化一下误差，将目标点集与匹配后的点集作差方和，把获得的数据均值化后再开根号，这就得到的一个合理的度量，称之为RMS.</p>
+<p>知道了ICP的思想之后，我们不难发现其计算量集中在了匹配点上了，使用上述的差方和等运算显然这是人为地把算法的时间复杂度提升了好几个量级，一旦遇到含有百万级别的源数据，这就不可避免地造成了资源浪费。为此，我们在这里应用了k-d树，先用环境点集的数据建立起一个k-d树，然后，匹配点的问题就变成了在k-d树中查找最近点，于是，我们可以利用k-d树的特性，极快地完成计算.</p>
+<h3 id="K-d树最近点查询"><a href="#K-d树最近点查询" class="headerlink" title="K-d树最近点查询:"></a>K-d树最近点查询:</h3><p>假设我们已经建立起了一个k-d树，然后我们需要在这个k-d树中返回一个与红点所对应坐标最近的点，从降维图中，我们可以清晰地看到其查询过程.</p>
+<p><img src="https://c4.staticflickr.com/8/7742/27531117803_8fecba3172_b.jpg" alt="k-d树"></p>
+<p>其查询过程按照每一维度顺序循环的方式以树中的点逐渐逼近被查询点，直至以被查询点的半径内只有一个点时，那个点就是所要的点.</p>
+<p><img src="https://c6.staticflickr.com/8/7456/27531103813_e10024d77b_b.jpg" alt="k-d树应用前"></p>
+<p><img src="https://c1.staticflickr.com/8/7294/28042472072_2a289ebea6_b.jpg" alt="k-d树应用前"></p>
+<p>我们可以看到应用了k-d树之后，速度提升有近二十倍，但匹配次数还是15次效果还是不理想啊喂！！！不难发现，如果对计算得出的结果不满意，我们可以将使用k-d树所节约下来的时间用在更多的迭代次数上，这样就可以获得更加精准的匹配结果了.</p>
+<h3 id="边际噪声处理"><a href="#边际噪声处理" class="headerlink" title="边际噪声处理"></a>边际噪声处理</h3><p>在实际应用中，目标物体与环境如何区分的一大难点就是它的边界，所以，在进行匹配时，边界上的数据一般是有很大误差的，带上它进行匹配一会降低匹配的准确性、二会加大计算的工作量，故在一开始，我们就需要把边界上的数据给剔除了，剔除的方法也不复杂，我这里只做了很简单的事，将数据直接进行了三角剖分，找到那些与其他点耦合度比较小的点并作上标记，之后直接从原始数据中剔除，这样就不让它们参与匹配了.</p>
+<p><img src="https://c1.staticflickr.com/8/7321/28116671536_46a1d2eb86.jpg" alt="三角剖分"></p>
+<h3 id="还有几组数据，也来看看？"><a href="#还有几组数据，也来看看？" class="headerlink" title="还有几组数据，也来看看？"></a>还有几组数据，也来看看？</h3><p><img src="https://c7.staticflickr.com/8/7459/28111906046_70fda4f4d5.jpg" alt="三维人脸初始"></p>
+<p><img src="https://c3.staticflickr.com/8/7551/27865104850_4109b56d05.jpg" alt="三维人脸结果"><br>这人脸数据迭代15次效果挺不错的</p>
+<p><img src="https://c3.staticflickr.com/8/7322/27530976434_c75f3fac83.jpg" alt="迭代15次结果"></p>
+<p><img src="https://c8.staticflickr.com/8/7408/28146730855_0bb4633025.jpg" alt="迭代35次结果"><br>这龙迭代15次就不行了，还是35次看上去靠谱，（跟我一起念k-d树大法好！</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ICP/">ICP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/11/海報製作/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          海報製作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/06/25/Markdown学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Markdown学习笔记&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Chrisyayu All rights reserved.&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

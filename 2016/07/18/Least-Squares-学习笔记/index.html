@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Least-Squares-学习笔记 - Chrisyayu&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最小二乘法这篇博客我写了两整个晚上，也是累累的…
+原理最小二乘法是一种优化方法，其核心是使得所求得的量确定下来的数据与源数据之间的误差的平方和最小，从而使得求得的量就是在当前条件下能与源数据匹配程度最佳的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Least-Squares-学习笔记">
+<meta property="og:url" content="https://chrisyayu.github.io/2016/07/18/Least-Squares-学习笔记/index.html">
+<meta property="og:site_name" content="Chrisyayu's Blog">
+<meta property="og:description" content="最小二乘法这篇博客我写了两整个晚上，也是累累的…
+原理最小二乘法是一种优化方法，其核心是使得所求得的量确定下来的数据与源数据之间的误差的平方和最小，从而使得求得的量就是在当前条件下能与源数据匹配程度最佳的。">
+<meta property="og:image" content="https://c7.staticflickr.com/9/8587/28285577662_ef4a752f27.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/9/8889/28285577752_dd13e1a194.jpg">
+<meta property="og:image" content="https://c3.staticflickr.com/9/8868/27773975074_7da116c038.jpg">
+<meta property="og:updated_time" content="2016-07-18T15:58:40.599Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Least-Squares-学习笔记">
+<meta name="twitter:description" content="最小二乘法这篇博客我写了两整个晚上，也是累累的…
+原理最小二乘法是一种优化方法，其核心是使得所求得的量确定下来的数据与源数据之间的误差的平方和最小，从而使得求得的量就是在当前条件下能与源数据匹配程度最佳的。">
+<meta name="twitter:image" content="https://c7.staticflickr.com/9/8587/28285577662_ef4a752f27.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://chrisyayu.github.io"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-Least-Squares-学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Least-Squares-学习笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/07/18/Least-Squares-学习笔记/" class="article-date">
+  <time datetime="2016-07-18T14:52:06.000Z" itemprop="datePublished">2016-07-18</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h2><p>这篇博客我写了两整个晚上，也是累累的…</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>最小二乘法是一种优化方法，其核心是使得所求得的量确定下来的数据与源数据之间的误差的平方和最小，从而使得求得的量就是在当前条件下能与源数据匹配程度最佳的。</p>
+<a id="more"></a>
+<p>最小二乘法针对的是单元模型，而对于多元模型，我们能做的是：在每一维度上进行最小二乘，然后再进行后续操作。在此，我们就用最小二乘法应用于单元线性回归模型来解决曲线拟合问题。</p>
+<p>在试验中，有很多数据是与一个自变量有关，我们将这些数据点记为(xi,yi)，i=1,2…n，这些点都是离散的，我们想用一个连续的函数将它们的规律表示出来，显然，符合这种条件的曲线实在是太多了，同时也因为，这些数据本身就是实验所获得的，只是部分地反映了实验对象的性质，外加数据也是有限的，直接从数据中直接获得精确解是不可能的，故我们放低要求，将目标改为获得一个较为匹配的解，(至于为什么是较为匹配的？因为拟合时，如果遇到不同的目标需求以及仅有的算力，往往最后作为结果的不是极高次的、最佳匹配的式子)这样就可以使得我们的目标可以实现了。</p>
+<h3 id="由来"><a href="#由来" class="headerlink" title="由来"></a>由来</h3><p>其实在如何拟合最佳曲线时需要的是总误差要尽可能小，落实到具体中标准可以有很多，而最后只是由于最小二乘法被认为是更为合理的而被特地厚待，并成为人们广泛应用的方法。我们不妨对它们进行一下对比：</p>
+<p>第一梯队：<br>从每个数据点向目标函数引垂线，然后计算使得这些垂线段总和最短的。很明显，通过这种方法计算得到的结果会是最精确的，但是呢，这样的计算很麻烦而且计算量很大啊喂！然后人类义无反顾地抛弃了这种方法，转向了第二梯队。</p>
+<p>第二梯队：<br>固定下自变量，计算每个数据与目标函数作差后那些量的总和(计入的只是应变量方向上的差)。可喜的是，虽然降低了很多精度，但看上去还不错。</p>
+<p>1）每个数据与目标作差后的总和最小，显然，这个遇到一正一负的时候，应该被计入的误差被抵消了，故舍去(实际上是奇数次方都要被舍去)。<br>2）每个数据与目标作差后的绝对值和最小，但所有东西一旦带上绝对值就会很麻烦啊，所以就被放弃了。<br>3）每个数据与目标作差后的平方和最小，嗯，这个不错！<br>4）每个数据与目标作差后的四次方和最小，次数越高虽然越精确，但是啊，计算量太大了！<br>……</p>
+<p>所以，选择最小二乘，一是它计算比较方便，而是它保留了完整地误差信息。第二梯队的其实放到Lp空间里面就很直观了：</p>
+<blockquote>
+<p>1）对应的是L1<br>2）对应的是L<span>$\infty$</span><!-- Has MathJax --><br>3）对应的是L2<br>4）对应的是L4<br>……</p>
+</blockquote>
+<h3 id="到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？"><a href="#到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？" class="headerlink" title="到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？"></a>到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？</h3><p>有两种方法(说是两种，实际上一种是另一种的另外一种形式的表达，只不过它太方便了，以至于我们直接把它当作了一种新方法，当然，在这里我们呢，还是从最原始的开始，一步一步来。</p>
+<p>好吧，既然我读的是数学，不管怎么绕都要用到Latex…</p>
+<p>设最后拟合出来的多项式为：<br><span>$y = a_0 + a_1x + \dots + a_kx^k$</span><!-- Has MathJax --></p>
+<p>将每个数据与之作差方：<br><span>$R^2 = \sum\limits^n_{i=1}[y_i - (a_0 + a_1x_i + \dots + a_k{x_i}^k)]^2$</span><!-- Has MathJax --></p>
+<p>再对每一个a求偏导：<br><span>$-2\sum\limits^n_{i=1}[y_i - (a_0 + a_1x_i + \dots + a_k{x_i}^k)] = 0$</span><!-- Has MathJax --><br><span>$-2\sum\limits^n_{i=1}[y_i - (a_0 + a_1x_i + \dots + a_k{x_i}^k)]x_i = 0$</span><!-- Has MathJax --><br><span>$\dots$</span><!-- Has MathJax --><br><span>$-2\sum\limits^n_{i=1}[y_i - (a_0 + a_1x_i + \dots + a_k{x_i}^k)]{x_i}^k = 0$</span><!-- Has MathJax --></p>
+<p>然后我们把上面得到的式子展开合并：<br><span>$a_0n + a_1\sum\limits^n_{i=1}x_i + \dots + a_k\sum\limits^n_{i=1}{x_i}^k = \sum\limits^n_{i=1}y_i$</span><!-- Has MathJax --><br><span>$a_0\sum\limits^n_{i=1}x_i + a_1\sum\limits^n_{i=1}{x_i}^2 + \dots + a_k\sum\limits^n_{i=1}{x_i}^{k+1} = \sum\limits^n_{i=1}x_iy_i$</span><!-- Has MathJax --><br><span>$\dots$</span><!-- Has MathJax --><br><span>$a_0\sum\limits^n_{i=1}{x_i}^k + a_1\sum\limits^n_{i=1}{x_i}^{k+1} + \dots + a_k\sum\limits^n_{i=1}{x_i}^{2k} = \sum\limits^n_{i=1}{x_i}^ky_i$</span><!-- Has MathJax --></p>
+<p>至此，由于x和y都是已知的，对于k+1个未知数我们有k+1个方程，故我们可以把a全部都求解出来，把它们代入假设的多项式就行了。(第一种方法终了</p>
+<p>后一种方法实际上就是把上一种方法表示成矩阵的形式：<br><span>$$\begin{bmatrix}
+n &amp; \sum\limits^n_{i=1}x_i &amp; \dots &amp; \sum\limits^n_{i=1}{x_i}^k\\
+\sum\limits^n_{i=1}x_i &amp; \sum\limits^n_{i=1}{x_i}^2 &amp; \dots &amp; \sum\limits^n_{i=1}{x_i}^{k+1}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+\sum\limits^n_{i=1}{x_i}^k &amp; \sum\limits^n_{i=1}{x_i}^{k+1} &amp; \dots &amp; \sum\limits^n_{i=1}{x_i}^{2k}
+\end{bmatrix}
+\begin{bmatrix}
+a_0\\
+a_1\\
+\vdots\\
+a_k
+\end{bmatrix}=
+\begin{bmatrix}
+\sum\limits^n_{i=1}y_i\\
+\sum\limits^n_{i=1}{x_i}y_i\\
+\vdots\\
+\sum\limits^n_{i=1}{x_i}^ky_i
+\end{bmatrix}$$</span><!-- Has MathJax --></p>
+<p>这个矩阵化简后其实是个范德蒙矩阵(也是厉害orz<br><span>$$\begin{bmatrix}
+1 &amp; x_1 &amp; \dots &amp; {x_1}^k\\
+1 &amp; x_2 &amp; \dots &amp; {x_2}^k\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+1 &amp; x_n &amp; \dots &amp; {x_n}^k
+\end{bmatrix}
+\begin{bmatrix}
+a_0\\
+a_1\\
+\vdots\\
+a_k
+\end{bmatrix}=
+\begin{bmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_n
+\end{bmatrix}$$</span><!-- Has MathJax --></p>
+<p>这样我们就把原问题转化为了A*x=y</p>
+<p>A是由实验所得自变量计算得出的，维度为nxm<br>x是所要求的，维度为mx1<br>y是实验测得的结果，维度为nx1</p>
+<p>不难发现A和y都是已知的，而且它们之间的关系我们也知道，但是呢，不能直接除啊！！！(维度不一样，这个自己手算一遍就知道了）为了解决这个问题，我们先在A*x=y这个式子的两边同时左乘A的转置，也就得到了：<br><span>$A^TAx = A^Ty$</span><!-- Has MathJax --><br><span>$x = (A^TA)^{-1}A^Ty$</span><!-- Has MathJax --><br><span>$(A^TA)^{-1}是m\times m ，它列满秩时才有唯一解...$</span><!-- Has MathJax --><br><span>$A^Ty是m\times 1$</span><!-- Has MathJax --></p>
+<p>这样求x就没有任何问题了(第二种方法终了</p>
+<p>以后遇到这种问题时，只要代公式就行啦啦啦!(这就是传说中的第二种方法<br><span>$x = (A^TA)^{-1}A^Ty$</span><!-- Has MathJax --></p>
+<p>对了，这里还说一下所谓的正规方程就是：<br><span>$A^TAx = A^Ty$</span><!-- Has MathJax --></p>
+<p>把这个死算出来，然后得到的方程组就是了</p>
+<p>嗯，接下来就让我们实际应用一下<br>先导入数据点，然后直接看吧</p>
+<pre><code>hold on
+plot(x,y,&apos;*&apos;);
+p=polyfit(x,y,3);
+z=polyval(p,t);
+plot(x,z,&apos;-b&apos;)
+</code></pre><p><img src="https://c7.staticflickr.com/9/8587/28285577662_ef4a752f27.jpg" alt="3次多项式"></p>
+<pre><code>hold on
+plot(x,y,&apos;*&apos;);
+p=polyfit(x,y,30);
+z=polyval(p,t);
+plot(x,z,&apos;-b&apos;)
+</code></pre><p><img src="https://c1.staticflickr.com/9/8889/28285577752_dd13e1a194.jpg" alt="30次多项式"></p>
+<p>拟合的次数太高，感觉没什么意义的样子？</p>
+<p>还要说一下，上面这样的做法有局限性，如果遇到要拟合的多项式每一项并不是仅仅单纯的次数不同，而是有三角函数等(也就是以x为自变量复合了函数那样的，那上述实现就不适用了。</p>
+<p>好吧，上面这种做法其实是一个特殊情况，我们推导出来的那个式子才是王道。<br><span>$x = (A^TA)^{-1}A^Ty$</span><!-- Has MathJax --></p>
+<p>在MATLAB中，我们可以做得更简单，直接写出<br><span>$A*x=y$</span><!-- Has MathJax --><br>然后<span>$x = A \backslash y$</span><!-- Has MathJax --><br>结果就出来了</p>
+<p>这里以拟合圆为例，首先给出正规方程<br><span>$$\begin{cases}
+am+R\sum\limits^m_{i=1}cos(2\pi \frac{t_i}{T})=\sum\limits^m_{i=1}x_i\\
+bm+R\sum\limits^m_{i=1}sin(2\pi \frac{t_i}{T})=\sum\limits^m_{i=1}y_i\\
+a\sum\limits^m_{i=1}cos(2\pi \frac{t_i}{T})+b\sum\limits^m_{i=1}sin(2\pi \frac{t_i}{T})+Rm = \sum\limits^m_{i=1}cos(2\pi \frac{t_i}{T})x_i+\sum\limits^m_{i=1}sin(2\pi \frac{t_i}{T})y_i
+\end{cases}$$</span><!-- Has MathJax --></p>
+<pre><code>plot(x,y,&apos;*&apos;);
+hold on;
+m=100;i=1:100;
+A=[m,0,sum(cos(2*pi*t(i)/T));0,m,sum(sin(2*pi*t(i)/T));sum(cos(2*pi*t(i)/T)),sum(sin(2*pi*t(i)/T)),m];
+y=[sum(x(i));sum(y(i));sum((cos(2*pi*t(i)/T))&apos;*x(i))+sum((sin(2*pi*t(i)/T))&apos;*y(i))];
+x=A\y;
+ezplot(&apos;(x-0.5116)^2+(y-0.4968)^2=1.0210^2&apos;)
+</code></pre><p><img src="https://c3.staticflickr.com/9/8868/27773975074_7da116c038.jpg" alt="最小二乘法30次"></p>
+<p>终于写完了，第一次写这么长的博客，想想还是有点小激动啊！<br>汗，发现hexo本身居然不支持Latex，于是又捣鼓了半小时233</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/最小二乘法/">最小二乘法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/11/海報製作/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">海報製作&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Chrisyayu All rights reserved.&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
