@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://c7.staticflickr.com/9/8587/28285577662_ef4a752f27.jpg">
 <meta property="og:image" content="https://c1.staticflickr.com/9/8889/28285577752_dd13e1a194.jpg">
 <meta property="og:image" content="https://c3.staticflickr.com/9/8868/27773975074_7da116c038.jpg">
-<meta property="og:updated_time" content="2016-07-20T14:08:21.224Z">
+<meta property="og:updated_time" content="2016-07-20T14:10:23.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Least Squares Method学习笔记">
 <meta name="twitter:description" content="最小二乘法这篇博客我写了两整个晚上，也是累累的…
@@ -145,7 +145,7 @@ y_2\\
 y_n
 \end{bmatrix}$$</span><!-- Has MathJax --></p>
 <p>这样我们就把原问题转化为了A*x=y</p>
-<p>A是由实验所得自变量计算得出的，为nxm<br>x是所要求的，为mx1<br>y是实验测得的结果，为nx1</p>
+<p>A是由实验所得自变量计算得出的，大小为nxm<br>x是所要求的，大小为mx1<br>y是实验测得的结果，大小为nx1</p>
 <p>不难发现A和y都是已知的，而且它们之间的关系我们也知道，但是呢，不能直接除啊！！！(行列数不一样，这个自己手算一遍就知道了）为了解决这个问题，我们先在A*x=y这个式子的两边同时左乘A的转置，也就得到了：<br><span>$A^TAx = A^Ty$</span><!-- Has MathJax --><br><span>$x = (A^TA)^{-1}A^Ty$</span><!-- Has MathJax --></p>
 <span>$(A^TA)^{-1}是m\times m ，它列满秩时才有唯一解...$</span><!-- Has MathJax -->
 <span>$A^Ty是m\times 1$</span><!-- Has MathJax -->
