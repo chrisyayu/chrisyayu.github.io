@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://c7.staticflickr.com/9/8587/28285577662_ef4a752f27.jpg">
 <meta property="og:image" content="https://c1.staticflickr.com/9/8889/28285577752_dd13e1a194.jpg">
 <meta property="og:image" content="https://c3.staticflickr.com/9/8868/27773975074_7da116c038.jpg">
-<meta property="og:updated_time" content="2016-07-20T14:10:23.476Z">
+<meta property="og:updated_time" content="2016-07-20T14:23:49.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Least Squares Method学习笔记">
 <meta name="twitter:description" content="最小二乘法这篇博客我写了两整个晚上，也是累累的…
@@ -98,9 +98,7 @@
 <p>第二梯队：<br>固定下自变量，计算每个数据与目标函数作差后那些量的总和(计入的只是应变量方向上的差)。可喜的是，虽然降低了很多精度，但看上去还不错。</p>
 <p>1）每个数据与目标作差后的总和最小，显然，这个遇到一正一负的时候，应该被计入的误差被抵消了，故舍去(实际上是奇数次方都要被舍去)。<br>2）每个数据与目标作差后的绝对值和最小，但所有东西一旦带上绝对值就会很麻烦啊，所以就被放弃了。<br>3）每个数据与目标作差后的平方和最小，嗯，这个不错！<br>4）每个数据与目标作差后的四次方和最小，次数越高虽然越精确，但是啊，计算量太大了！<br>……</p>
 <p>所以，选择最小二乘，一是它计算比较方便，而是它保留了完整地误差信息。第二梯队的其实放到Lp空间里面就很直观了：</p>
-<blockquote>
 <p>1）对应的是L1<br>2）对应的是L<span>$\infty$</span><!-- Has MathJax --><br>3）对应的是L2<br>4）对应的是L4<br>……</p>
-</blockquote>
 <h3 id="到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？"><a href="#到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？" class="headerlink" title="到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？"></a>到这里，我们就已经把最小二乘法的原理以及由来解释好了，接下来我们如何求解最小二乘呢？</h3><p>有两种方法(说是两种，实际上一种是另一种的另外一种形式的表达，只不过它太方便了，以至于我们直接把它当作了一种新方法，当然，在这里我们呢，还是从最原始的开始，一步一步来。</p>
 <p>好吧，既然我读的是数学，不管怎么绕都要用到Latex…</p>
 <p>设最后拟合出来的多项式为：<br><span>$y = a_0 + a_1x + \dots + a_kx^k$</span><!-- Has MathJax --></p>
