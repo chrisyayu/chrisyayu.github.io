@@ -7,23 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="还在写，真的真的！！快结束了，不要急…
 23：201933字……^ - ^ 想睡了
-主成分分析PCA(Principal Component Analysis)是一种非常有力的数据处理方法，它可以把数据处理成在各个维度上全都线性无关，也就是说我们可以把原始数据中大量重复的部分舍去，提取出其中最有价值的部分，这样一说，我们就可以发现这种算法的用途非常广泛，通用性太强啦！
-在生活中，我们看到的信息或者">
+晚了一天放上来，罪过…">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Principal Component Analysis学习笔记">
 <meta property="og:url" content="https://chrisyayu.github.io/2016/07/31/Principal-Component-Analysis学习笔记/index.html">
 <meta property="og:site_name" content="Chrisyayu's Blog">
 <meta property="og:description" content="还在写，真的真的！！快结束了，不要急…
 23：201933字……^ - ^ 想睡了
-主成分分析PCA(Principal Component Analysis)是一种非常有力的数据处理方法，它可以把数据处理成在各个维度上全都线性无关，也就是说我们可以把原始数据中大量重复的部分舍去，提取出其中最有价值的部分，这样一说，我们就可以发现这种算法的用途非常广泛，通用性太强啦！
-在生活中，我们看到的信息或者">
-<meta property="og:updated_time" content="2016-08-01T12:55:55.137Z">
+晚了一天放上来，罪过…">
+<meta property="og:updated_time" content="2016-08-01T12:57:35.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Principal Component Analysis学习笔记">
 <meta name="twitter:description" content="还在写，真的真的！！快结束了，不要急…
 23：201933字……^ - ^ 想睡了
-主成分分析PCA(Principal Component Analysis)是一种非常有力的数据处理方法，它可以把数据处理成在各个维度上全都线性无关，也就是说我们可以把原始数据中大量重复的部分舍去，提取出其中最有价值的部分，这样一说，我们就可以发现这种算法的用途非常广泛，通用性太强啦！
-在生活中，我们看到的信息或者">
+晚了一天放上来，罪过…">
   
   
     <link rel="icon" href="/favicon.png">
@@ -92,6 +89,8 @@
       
         <p>还在写，真的真的！！<br>快结束了，不要急…</p>
 <p>23：20<br>1933字<br>……^ - ^ 想睡了</p>
+<p>晚了一天放上来，罪过…</p>
+<a id="more"></a>
 <h3 id="主成分分析"><a href="#主成分分析" class="headerlink" title="主成分分析"></a>主成分分析</h3><p>PCA(Principal Component Analysis)是一种非常有力的数据处理方法，它可以把数据处理成在各个维度上全都线性无关，也就是说我们可以把原始数据中大量重复的部分舍去，提取出其中最有价值的部分，这样一说，我们就可以发现这种算法的用途非常广泛，通用性太强啦！</p>
 <p>在生活中，我们看到的信息或者说希望看到的信息一般是要简洁、直观的，所以大多采取的是图表，但在计算机里面就直接变成矩阵啦(也挺直观的，我是不是说了很多废话？比如说游乐园里面消费情况：<br>(日期，进园人数，设施游乐次数，消费次数，消费金额）<br>在这里，日期表示的是一个标记，并不需要过多分析，因为我们更多关心的是那些具有深层价值的度量值，舍去日期后，我们可以得到一个四维向量：</p>
 <span>$(400, 2500, 2800, 10000)^T$</span><!-- Has MathJax -->
@@ -123,7 +122,7 @@
 <p>这里我们就要用到协方差了，根据协方差的定义，协方差是两两之间的</p>
 <span>$Cov(X,Y)=E[(X-E[X])(Y-E[Y])]$</span><!-- Has MathJax -->
 <p>因为我们已经中心化过了，直接有</p>
-<span>$Cov(a,b)=\frac{1}{m}\sum_{i=1}^m{a_ib_i}$</span><!-- Has MathJax -->
+<span>$Cov(a,b)=\frac{1}{m}\sum\limits_{i=1}^m{a_ib_i}$</span><!-- Has MathJax -->
 <p>协方差值为0则表示两个维度上的信息独立，这正是我们所需要的，那怎么为0？第二个方向与第一个方向正交呀！<br>所以降维问题可以转化这样：如果要把n为向量降维到k维，那么我们需要找到k个正交基，并且在这k个正交基下，不同维度协方差为0，同一维度的方差最大</p>
 <p>上面说了我们需要的结果是怎么样的，接下来让我们看看那些基到底怎么找？</p>
 <p>我们首先先要求得协方差矩阵，因为这是基的来源所在，假如我们有a和b两个维度，把它们按行排列组成矩阵X：</p>
