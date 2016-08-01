@@ -83,6 +83,57 @@
       
         <p>还在写，真的真的！！<br>快结束了，不要急…</p>
 <p>23：20<br>1933字<br>……^ - ^ 想睡了</p>
+<h3 id="主成分分析"><a href="#主成分分析" class="headerlink" title="主成分分析"></a>主成分分析</h3><p>PCA(Principal Component Analysis)是一种非常有力的数据处理方法，它可以把数据处理成在各个维度上全都线性无关，也就是说我们可以把原始数据中大量重复的部分舍去，提取出其中最有价值的部分，这样一说，我们就可以发现这种算法的用途非常广泛，通用性太强啦！</p>
+<p>在生活中，我们看到的信息或者说希望看到的信息一般是要简洁、直观的，所以大多采取的是图表，但在计算机里面就直接变成矩阵啦(也挺直观的，我是不是说了很多废话？比如说游乐园里面消费情况：<br>(日期，进园人数，设施游乐次数，消费次数，消费金额）<br>在这里，日期表示的是一个标记，并不需要过多分析，因为我们更多关心的是那些具有深层价值的度量值，舍去日期后，我们可以得到一个四维向量：</p>
+<span>$(400, 2500, 2800, 10000)^T$</span><!-- Has MathJax -->
+<p>这就算是一天的记录，我们用列向量表示(习惯，如果遇到一大堆数据时，它们就是又宽又矮的样子！其实吧，才四维的数据根本不需要PCA，直接人脑分析不就行了？但是，如果遇到维数很高很高的，PCA就很有必要了，所有东西都拿去算显然不太可能，我们需要这些数据降维，当然数据一降维，就会损失信息，但是呢，我们可以量化出哪些维度上的信息是多余的，去掉这部分地，那就可以既降维又保留住最有价值的信息了！</p>
+<p>举个栗子，假设一个维度上记录了出生地是上海，另一个维度上记录了出生地不是上海(我就是要强行举个栗子，显然前一个维度记录好了，另一个维度完全是多余的，因为它们是对立的，那如果这两个维度记录的分别是考试成绩高于80和高于90，那显然它们的关联性也很强，当需要关注的力度不大时，完全可以舍去另外一个而不影响整体。</p>
+<p>知道了PCA是拿来干嘛的后，我们就会关心这到底要怎么做啊！<br>首先，让我们来了解一下基础知识(听说数学很重要！<br>简单起见，我们就在二维空间中说吧，假设有两个向量：</p>
+<span>$a = (a_1,a_2)$</span><!-- Has MathJax -->
+<span>$b = (b_1,b_2)$</span><!-- Has MathJax -->
+<p>将它们做一下内积，就得到了<span>$a_1b_1+a_2b_2$</span><!-- Has MathJax -->，这几何意义是什么呢？往下看<br>我们知道这两个向量在坐标系中可以表示成有向线段，a在b上的投影也就是<span>$|a|cos(a)$</span><!-- Has MathJax -->，而内积的公式是<span>$|a||b|cos(a)$</span><!-- Has MathJax -->，显然投影的时候可以视为b是单位向量的内积，意识到这个就好了！当b是单位向量时，a与b的内积就是a向b的投影</p>
+<p>然后让我们思考一下，为什么我们画一个向量的时候，找到对应的x值和y值就画出来了？那是因为我们是在一个笛卡尔坐标系中画的，<span>$(a_1,a_2)$</span><!-- Has MathJax -->中的两个值就是在两个基方向上的投影，写成这样就可以明白了：</p>
+<span>$(a_1,a_2) = (a_1,a_2)(1,0) + (a_1,a_2)(0,1)$</span><!-- Has MathJax -->
+<p>当要作为基的方向不是<span>$(1,0)$</span><!-- Has MathJax -->和<span>$(0,1)$</span><!-- Has MathJax -->时，我们先将它们单位化，于是根据上面投影的结论，我们可以知道要获取一个向量在新方向上的坐标的话直接拿其在(1,0)和(0,1)基下的坐标左乘新基就可以了！<br>那基底不正交怎么办？你选正交的不就好了嘛！何苦为难自己…</p>
+<p>同样举个栗子，假设新基为<span>$(c_1,c_2)$</span><!-- Has MathJax -->和<span>$(d_1,d_2)$</span><!-- Has MathJax -->，如果要把a和b变换到这两个方向为基底的坐标系中，那就有：</p>
+<span>$\begin{pmatrix} c_1 &amp; c_2 \\ d_1 &amp; d_2 \end{pmatrix} \begin{pmatrix} a_1 &amp; b_1 \\ a_2 &amp; b_2 \end{pmatrix} = \begin{pmatrix} a_1c_1+a_2c_2 &amp; b_1c_1+b_2c_2 \\ a_1d_1+a_2d_2 &amp; b_1d_2+b_2d_2 \end{pmatrix}$</span><!-- Has MathJax -->
+<p>直白的说也就是，把新基横放写成一个矩阵，然后拿它左乘由竖放待变换向量构成的矩阵，最后得到的就是在新基下的坐标矩阵</p>
+<span>$$\begin{pmatrix} e_1 \\ e_2 \\ \vdots \\ e_n \end{pmatrix}
+\begin{pmatrix} a_1 &amp; a_2 &amp; \cdots &amp; a_m \end{pmatrix} = \begin{pmatrix} e_1a_1 &amp; e_1a_2 &amp; \cdots &amp; e_1a_m \\ e_2a_1 &amp; e_2a_2 &amp; \cdots &amp; e_2a_m \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ e_na_1 &amp; e_na_2 &amp; \cdots &amp; e_na_m \end{pmatrix}$$</span><!-- Has MathJax -->
+<p>通过上面，我们可以这样理解矩阵相乘，它实际上是把右阵中的每一列变换到由左阵中每一行基所构成的空间中去！有没有感觉开启了一扇新世界的大门？</p>
+<p>至此，我们煞有其事地掌握了一些东西，但有什么用呢？实际上，在这里就可以强行降维了，只要把要变换到的空间维数降低即可，也就是左乘的那个矩阵少掉几行就是在降维了orz，但是呢，你怎么知道，去掉的是不重要的，也就是说，这么强行降维出门不怕被人笑嘛233</p>
+<p>所以，我们需要量化每个维度上的重要性，然后再降维</p>
+<p>再举个栗子，我们得到了二维的一些点，需要把它们降到一维上，首先，把它们画在坐标系中，为了直观以及后续处理方便，对它们进行中心化(每个维度都减去该维度上的均值，到这里疑问就产生了，怎么样才能量化重要性呢？一个朴素的思想是：它们投影到目标方向上后越分散越好！这不难理解，假如在x轴上有好多点，你沿x轴方向看过去，那么只能看到一个点，好多有用的信息都丢失了，那斜着看呢，行，但丢失的信息与看的角度有关，所以，沿着垂直于x轴的方向看过去才是王道，它们越分散越好。</p>
+<p>这个听起来不错，那怎么实现呢？</p>
+<p>说到分散，我们应该很自然地想到方差，毕竟它就是用来度量离散程度的嘛！根据方差的定义，每一个量都要先减去它们共同的均值</p>
+<span>$Var(a)=\frac{1}{m}\sum\limits_{i=1}^m{(a_i-E(a))^2}$</span><!-- Has MathJax -->
+<p>，感觉很麻烦，所以，就像上面做的那样，拿到数据首先进行中心化，实际上也就是做了一次平移，之后就简单了，直接求出它们的平方和然后除以个数</p>
+<span>$Var(a)=\frac{1}{m}\sum\limits_{i=1}^m{a_i^2}$</span><!-- Has MathJax -->
+<p>所以上面的问题在这里就变为了：去找一个基，使得每个点投影到这个方向上后，方差值最大</p>
+<p>可是呢，二维降一维这种事很少见(对，太简单了，世界上哪有这么多好事？到了高维，我们首先找出一个使方差最大的方向后，如果还是只找方差最大方向的话，第二个方向有极大的可能与第一个方向十分相近，之后的方向都会有这个问题，显然这不行，虽然它们都保留了很多信息，但是它们中有很多信息都是重复的，没有起到效果！</p>
+<p>这里我们就要用到协方差了，根据协方差的定义，协方差是两两之间的</p>
+<span>$Cov(X,Y)=E[(X-E[X])(Y-E[Y])]$</span><!-- Has MathJax -->
+<p>因为我们已经中心化过了，直接有</p>
+<span>$Cov(a,b)=\frac{1}{m}\sum_{i=1}^m{a_ib_i}$</span><!-- Has MathJax -->
+<p>协方差值为0则表示两个维度上的信息独立，这正是我们所需要的，那怎么为0？第二个方向与第一个方向正交呀！<br>所以降维问题可以转化这样：如果要把n为向量降维到k维，那么我们需要找到k个正交基，并且在这k个正交基下，不同维度协方差为0，同一维度的方差最大</p>
+<p>上面说了我们需要的结果是怎么样的，接下来让我们看看那些基到底怎么找？</p>
+<p>我们首先先要求得协方差矩阵，因为这是基的来源所在，假如我们有a和b两个维度，把它们按行排列组成矩阵X：</p>
+<span>$X=\begin{pmatrix} a_1 &amp; a_2 &amp; \cdots &amp; a_m \\ b_1 &amp; b_2 &amp; \cdots &amp; b_m \end{pmatrix}$</span><!-- Has MathJax -->
+<p>然后拿X乘以X的转置，再去除以个数就可以得到：</p>
+<span>$\frac{1}{m}XX^T=\begin{pmatrix} \frac{1}{m}\sum_{i=1}^m{a_i^2} &amp; \frac{1}{m}\sum_{i=1}^m{a_ib_i} \\ \frac{1}{m}\sum_{i=1}^m{a_ib_i} &amp; \frac{1}{m}\sum_{i=1}^m{b_i^2} \end{pmatrix}$</span><!-- Has MathJax -->
+<p>有没有发现什么？对角线上的恰好就是每个维度上的方差，而其他元素是协方差。</p>
+<p>下面要做的事情就简单了，把这个对称阵进行对角化(这个应该都会吧……这样就得到了我们所需要的基<br>你可能会有疑问：这样得到的基唯一嘛？在不考虑次序的情况下是唯一的，不唯一还得了？</p>
+<p>之后将特征值按从大到小排列，这也就去确定好了次序，再把特征向量对应上去，这样我们就获得了一个对角元从大到小排列好的对角阵，每一个元素代表了重要程度，其对应的特征向量就是那个维度应该对应的基，最后选取前k个基所组成的矩阵去左乘原始数据就完成了降维！</p>
+<p>具体实现看看代码吧：</p>
+<pre><code>function [evects,evals] = PCA(X)
+X=bsxfun(@minus,X,mean(X,2)); % 中心化
+c = cov(X&apos;,1); % 计算协方差矩阵
+[vec,val] = eig(c); % 计算特征值以及特征向量
+[v,ord] = sort(diag(val)); % 从大到小返回特征值下标
+evects = vec(:,ord); % 依次取得特征向量
+val = diag(val); % 取得特征值
+evals = val(ord); % 对特征值进行排列
+</code></pre><p>哇咔咔！我终于写完啦！！！    完结撒花(~▽~)/</p>
 
       
     </div>
@@ -464,6 +515,23 @@
 
 
 <script src="/js/script.js"></script>
-  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
